@@ -1,10 +1,10 @@
 quickfunfact/
-│── index.html      # Main webpage
+│── index.html      # Main webpage (Must be in the root folder)
 │── script.js       # JavaScript for fact rotation
-│── styles.css      # Basic styling
-│── facts.json      # Preloaded facts (backup)
-│── api.js          # Handles API calls
-│── vercel.json     # Configuration for Vercel
+│── styles.css      # CSS styling
+│── facts.json      # Preloaded facts
+│── api.js          # Handles API
+│── vercel.json     # (optional) for Vercel
 <!DOCTYPE html>
 <html lang="en">
 <head>
