@@ -1,5 +1,5 @@
 quickfunfact/
-│── index.html      # Main webpage (Must be in the root folder)
+│── index.html      # Main webpage
 │── script.js       # JavaScript for fact rotation
 │── styles.css      # CSS styling
 │── facts.json      # Preloaded facts
