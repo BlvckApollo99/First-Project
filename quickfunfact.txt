@@ -1,0 +1,113 @@
+quickfunfact/
+│── index.html      # Main webpage
+│── script.js       # JavaScript for fact rotation
+│── styles.css      # Basic styling
+│── facts.json      # Preloaded facts (backup)
+│── api.js          # Handles API calls
+│── vercel.json     # Configuration for Vercel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Fun Fact</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Today's Fun Fact</h1>
+        <p id="fact">Loading...</p>
+        <button id="newFact">Get Another Fact</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+button {
+    background: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+{
+    "facts": [
+        "Honey never spoils.",
+        "Bananas are berries, but strawberries aren't.",
+        "A day on Venus is longer than a year on Venus.",
+        "Octopuses have three hearts.",
+        "Wombat poop is cube-shaped."
+    ]
+}
+const getAPIFact = async () => {
+    try {
+        let response = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+        let data = await response.json();
+        return data.text;
+    } catch (error) {
+        console.error("API fetch failed, using backup fact.");
+        return getBackupFact();
+    }
+};
+
+const getAIFact = async () => {
+    try {
+        let response = await fetch('https://your-ai-api-endpoint.com/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: "Give me a fun fact" })
+        });
+        let data = await response.json();
+        return data.fact;
+    } catch (error) {
+        console.error("AI fetch failed, using API-based fact.");
+        return getAPIFact();
+    }
+};
+
+const getBackupFact = async () => {
+    let response = await fetch('facts.json');
+    let data = await response.json();
+    return data.facts[Math.floor(Math.random() * data.facts.length)];
+};
+document.addEventListener('DOMContentLoaded', async () => {
+    const factElement = document.getElementById('fact');
+    const newFactButton = document.getElementById('newFact');
+
+    const loadFact = async () => {
+        factElement.textContent = "Fetching fun fact...";
+        let fact = await getAIFact();
+        factElement.textContent = fact;
+    };
+
+    newFactButton.addEventListener('click', loadFact);
+
+    // Load an initial fact
+    loadFact();
+});
+{
+    "rewrites": [{ "source": "/api/*", "destination": "/api/index.js" }],
+    "cleanUrls": true
+}
